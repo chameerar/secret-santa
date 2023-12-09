@@ -1,21 +1,18 @@
 import ballerina/io;
 import wso2/choreo.sendemail;
 import ballerina/random;
+import ballerina/regex;
 
-configurable string [] emails = [];
+configurable string[] emails = ["chameera", "lakmini", "isru", "supimi"];
 sendemail:Client emailClient = check new ();
+
 public function main() returns error? {
     map<string> assignmentMap = {};
-    string[] receivers = check emails.slice(0, emails.length() - 1);
-    
-    foreach var i in 0...emails.length() {
-        int randomInt = check random:createIntInRange(0, emails.length());
-        string giver = emails[i];
-        string receiver = emails[randomInt];
-    }
+    string[] receivers = emails.slice(0, emails.length());
+
     boolean allAssigned = false;
-    while  !allAssigned {
-        foreach var i in 0...emails.length() {
+    while !allAssigned {
+        foreach var i in 0 ... emails.length() - 1 {
             int receiverIndex = check random:createIntInRange(0, receivers.length());
             string giver = emails[i];
             string receiver = receivers[receiverIndex];
@@ -25,17 +22,19 @@ public function main() returns error? {
             }
         }
         allAssigned = true;
-        foreach var i in 0...emails.length() {
+        foreach var i in 0 ... emails.length() - 1 {
             if (assignmentMap[emails[i]] == "") {
                 allAssigned = false;
             }
         }
     }
-    int randomInt = check random:createIntInRange(0, emails.length());
-
     // string emailResponse = check emailClient->sendEmail(email, "Hello, World!", "Hello, World!");
     io:println("Hello, World!");
     foreach string giver in assignmentMap.keys() {
-        io:println(giver, " gives : ", assignmentMap[giver]);
+        string subject = "Secret Santa Assignment";
+        string receiver = assignmentMap.get(giver);
+        string receiverName = regex:split(receiver, "@")[0];
+        string body = "You should give to " + receiverName + "!";
+        string _ = check emailClient->sendEmail(giver, subject, body);
     }
 }
