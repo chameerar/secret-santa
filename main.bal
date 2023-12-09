@@ -35,6 +35,8 @@ public function main() returns error? {
         string receiver = assignmentMap.get(giver);
         string receiverName = regex:split(receiver, "@")[0];
         string body = "You should give to " + receiverName + "!";
+        io:println("Email sending to " + giver + " with subject " + subject + " and body " + body);
         string _ = check emailClient->sendEmail(giver, subject, body);
+        io:println("Email sent to " + giver + " with subject " + subject + " and body " + body);
     }
 }
