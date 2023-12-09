@@ -40,7 +40,7 @@ public function main() returns error? {
          if sendEmail is error {
              io:println("Error sending email to " + giver);
          } else {
-             io:println("Email sent to " + giver + " with subject " + subject + " and body " + body);
+             io:println("Email sent to " + giver + " with subject " + subject + " and body " + body + " and response " + sendEmail.toString()) ;
          }
         
     }
