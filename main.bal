@@ -28,20 +28,13 @@ public function main() returns error? {
             }
         }
     }
-    // string emailResponse = check emailClient->sendEmail(email, "Hello, World!", "Hello, World!");
-    io:println("Hello, World!");
+
     foreach string giver in assignmentMap.keys() {
         string subject = "Secret Santa Assignment";
         string receiver = assignmentMap.get(giver);
         string receiverName = regex:split(receiver, "@")[0];
         string body = "You should give to " + receiverName + "!";
         io:println("Email sending to " + giver + " with subject " + subject + " and body " + body);
-         string|error sendEmail = emailClient->sendEmail(giver, subject, body);
-         if sendEmail is error {
-             io:println("Error sending email to " + giver);
-         } else {
-             io:println("Email sent to " + giver + " with subject " + subject + " and body " + body + " and response " + sendEmail.toString()) ;
-         }
-        
+        string _ = check emailClient->sendEmail(giver, subject, body);
     }
 }
